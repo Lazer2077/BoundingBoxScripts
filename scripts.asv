@@ -1,0 +1,58 @@
+  close all;
+  %% single
+  pathIm= 'images\0000002_00005_d_0000014.jpg'
+  pathTx='annotations\0000002_00005_d_0000014.txt'
+
+%遍历路径下每一幅图像
+I=imread(pathIm);
+
+
+[p1x,p1y,p2x,p2y,t1,t2,t3,t4]=textread(pathTx,'%d,%d,%d,%d,%d,%d,%d,%d');
+p1x=p1x+1;
+p1y=p1y+1;
+try
+  [state,dst]=draw_rect(I,[p1x,p1y],[p2x,p2y],0);
+catch err
+  disp('error');
+  throw(err)
+end
+figure,imshow(dst);
+
+folder = './result/';
+if ~exist(folder,'dir')
+mkdir result;
+end
+imwrite(dst,'result\0000002_00005_d_0000014_labeled.jpg')
+
+%% muti
+
+fileExt1 = '*.jpg';  %待读取图像的后缀名
+isDefault=input('Please input if use Relative Path(default) dir, y or n:');
+
+if isDefault=='y'
+  SamplePath1 =  'images\';  %存储图像的路径
+  SamplePath2 =  'annotations\';  %存储图像的路径
+  folder = './result/';
+  if ~exist(folder,'dir')
+    mkdir result;
+  end
+else
+  inPath=input('Please input the path of folder:','s');
+  SamplePath1=strcat(inPath,'images\');
+  SamplePath2=strcat(inPath,'annotations\');
+  if ~exist(inPath,'dir')
+    disp('input path error');
+    return
+  end
+end
+%获取所有路径
+files = dir(fullfile(SamplePath1,fileExt1)); 
+len1 = size(files,1);
+disp
+target=input('Please input the target vector:\n');
+for i=1:len1;
+   ImfileName = strcat(SamplePath1,files(i).name); 
+   TxfileName = strcat(SamplePath2,files(i).name(1:end-4),'.txt')
+   [p1x,p1y,p2x,p2y,t1,t2,t3,t4]=textread(TxfileName,'%d,%d,%d,%d,%d,%d,%d,%d');
+  %  [state,result]= draw_rect(I,[p1x,p1y],[p2x,p2y],0);
+end
