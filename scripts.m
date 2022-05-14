@@ -31,11 +31,11 @@ imwrite(dst,'result\uav0000086_00000_v_0000005.jpg')
 
 %% muti
 
-fileExt1 = '*.jpg';  %待读取图像的后缀名
+fileExt1 = '*.jpg';  
 isDefault=input('Please input if use Relative Path(default) dir, y or n:','s');
 if isDefault=='y'
-  SamplePath1 =  'images\';  %存储图像的路径
-  SamplePath2 =  'annotations\';  %存储图像的路径
+  SamplePath1 =  'images\';  
+  SamplePath2 =  'annotations\';  
   folder = 'result\';
   if ~exist(folder,'dir')
     mkdir result;
@@ -50,11 +50,12 @@ elseif isDefault=='n'
     return
   end
 end
-%获取所有路径
 files = dir(fullfile(SamplePath1,fileExt1)); 
 len1 = size(files,1);
 sprintf('read %d file sucess!',len1)
 target=input('Please input the target vector:\n');
+minNum=input('Please input the min number of target:\n');
+
 for i=1:len1;
   ImfileName = strcat(SamplePath1,files(i).name); 
   TxfileName = strcat(SamplePath2,files(i).name(1:end-4),'.txt')
@@ -64,6 +65,9 @@ for i=1:len1;
     Im=imread(ImfileName);
   catch
     disp('read error');
+  end
+  if max(sum(t==target))>=minNum
+    continue;
   end
   [nx,ny,~]=size(Im)
   p1x=nx*p1x;
