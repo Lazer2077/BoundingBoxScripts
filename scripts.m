@@ -74,6 +74,6 @@ for i=1:len1;
   y=round(p1y);
   w=round(p2x);
   l=round(p2y);
-  [state,result]= draw_rect(I,[x,y],[p2x,p2y],0,t,target);
+  [state,result]= draw_rect(Im,[x,y],[w,l],0,t,target);
   imwrite(result,WtPath);
 end
